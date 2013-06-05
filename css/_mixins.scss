@@ -1,0 +1,111 @@
+
+@mixin shadow($opacity){
+	-webkit-box-shadow: 0px 3px 5px rgba(10, 10, 10, $opacity);
+	-moz-box-shadow:    0px 3px 5px rgba(10, 10, 10, $opacity);
+	box-shadow:         0px 3px 5px rgba(10, 10, 10, $opacity);
+}
+
+@mixin backgroundIMG($imgpath,$size,$repeat: no-repeat,$position:center) {
+	background: {
+        image: url($imgpath);
+        size:$size;
+		repeat: $repeat;
+		position:$position;
+    }
+}
+
+@mixin calc($property, $expression) { 
+  #{$property}: -moz-calc(#{$expression}); 
+  #{$property}: -o-calc(#{$expression}); 
+  #{$property}: -webkit-calc(#{$expression}); 
+  #{$property}: calc(#{$expression}); 
+} 
+
+@mixin gradient3($start,$mid,$end,$start-point,$mid-pos){
+	background: $start;
+	background: -moz-linear-gradient($start-point,  $start 0%, $mid $mid-pos, $end 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,$start), color-stop($mid-pos,$mid), color-stop(100%,$end));
+	background: -webkit-linear-gradient($start-point,  $start 0%,$mid $mid-pos,$end 100%);
+	background: -o-linear-gradient($start-point,  $start 0%,$mid $mid-pos,$end 100%);
+	background: -ms-linear-gradient($start-point,  $start 0%,$mid $mid-pos,$end 100%);
+	background: linear-gradient(to bottom,  $start 0%,$mid $mid-pos,$end 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$start', endColorstr='$end',GradientType=0 );
+}
+
+@mixin gradient($start, $end, $start-point){
+	background-image: -webkit-linear-gradient($start-point, $start, $end);
+	background-image: -moz-linear-gradient($start-point, $start, $end);
+	background-image: -ms-linear-gradient($start-point, $start, $end);
+	background-image: -o-linear-gradient($start-point, $start, $end);
+	background-image: linear-gradient($start-point, $start, $end);
+}
+
+@mixin transition($transition){
+    -webkit-transition: $transition;
+    -moz-transition: $transition;
+    -ms-transition: $transition;
+    -o-transition: $transition;
+    transition: $transition;
+}
+
+@mixin transition-duration($duration){
+	-webkit-transition-duration: $duration;
+	-moz-transition-duration: $duration;
+	-ms-transition-duration: $duration;
+	-o-transition-duration: $duration;
+	transition-duration: $duration;
+}
+
+
+@mixin transition-ease($ease){
+    -webkit-transition-duration: $ease;
+    -moz-transition-duration: $ease;
+    -ms-transition-duration: $ease;
+    -o-transition-duration: $ease;
+    transition-duration: $ease;
+}
+
+
+@mixin transition-delay($delay){
+    -webkit-transition-delay: $delay;
+    -moz-transition-delay: $delay;
+    -ms-transition-delay: $delay;
+    -o-transition-delay: $delay;
+    transition-delay: $delay;
+}
+
+@mixin transform($transform){
+	-webkit-transform: $transform;
+	-moz-transform: $transform;
+	-ms-transform: $transform;
+	-o-transform: $transform;
+	transform: $transform;
+
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	-ms-transform-style: preserve-3d;
+	-o-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+}
+
+@mixin inset-text{
+	text-shadow: 0 -1px 1px rgba(black,0.3);
+	-webkit-font-smoothing: antialiased;
+}
+
+
+@mixin animation($ani){
+	-webkit-animation: $ani;
+	-moz-animation: $ani;
+	-ms-animation: $ani;
+	-o-animation: $ani;
+	animation: $ani;
+}
+
+@mixin keyframes($name) {
+    @-webkit-keyframes #{$name} { @content; }
+    @-moz-keyframes #{$name} { @content; }
+    @-ms-keyframes #{$name} { @content; }
+    @-o-keyframes #{$name} { @content; }
+    @keyframes #{$name} { @content; }
+}
