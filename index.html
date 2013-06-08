@@ -22,10 +22,10 @@
 			</div>
 			<div class='mainscroll'>
 				<div class="loading <%= refreshStatus() === 2 ? 'shown' : '' %>"><div class='symbol'></div>Loading...</div>
-				<div class='searchbar'>
-					<input type='search' placeholder='search...' incremental/>
-				</div>
 				<ul id="list">
+					<li class='searchbar'>
+						<input type='search' placeholder='search...' incremental/>
+					</li>
 					<li class="noitem <%= news.countMatches() > 0 ? 'hidden' : "" %>">
 						There are no items.
 					</li>

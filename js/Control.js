@@ -10,6 +10,7 @@
     }, {
         init: function(){
             this.element.append(can.view(this.options.view, this.options));
+            dragger.setScrollElm($(".mainscroll"));
         },
 
         '{curNews} change': function(val){
@@ -70,9 +71,11 @@
 
         '.star touchstart': function(el, ev){
             dragger.touchClick(el, ev, function(){
-                var starred = this.options.curNews().attr("starred");
-                this.options.curNews().attr("starred", !starred);
-                this.options.curNews().save();
+                var n = this.options.curNews();
+                if(!n)return;
+                var starred = n.attr("starred");
+                n.attr("starred", !starred);
+                n.save();
             }.bind(this), {
                 drag: null
             });
@@ -82,30 +85,32 @@
             var t = ev.originalEvent.changedTouches[0],
                 sx = t.clientX,
                 sy = t.clientY;
-            dragger.register(sx, sy, el, function(moved, mover, dx, dy){
-                if(!moved){
+            dragger.register(sx, sy, el, function(dragstat, mover, dx, dy){
+                if(dragstat !== 3 && dragstat !== 2){
                     this.options.curNews(el.data('info'));
                     this.options.curNewsInd(this.options.news.indexOf(this.options.curNews()));
-                }else if(dx < -200){
-                    mover.animate({
-                        translate3d: "-100%, 0, 0",
-                        height: "0"
-                    },{
-                        duration: 200,
-                        complete: function(){
-                            el.data("info").destroy();
+                }else if(dragstat === 3){
+                    if(dx < -200){
+                        mover.animate({
+                            translate3d: "-100%, 0, 0",
+                            height: "0"
+                        },{
+                            duration: 200,
+                            complete: function(){
+                                el.data("info").destroy();
+                            }
+                        }).removeClass("toStar").removeClass("toRemove");
+                    }else{
+                        if(dx > 150){
+                            var n = el.data("info");
+                            n.attr("starred", !n.attr("starred"));
                         }
-                    }).removeClass("toStar").removeClass("toRemove");
-                }else{
-                    if(dx > 150){
-                        var n = el.data("info");
-                        n.attr("starred", !n.attr("starred"));
+                        mover.animate({
+                            translate3d: "0, 0, 0"
+                        }, {
+                            duration: 200
+                        }).removeClass("toStar").removeClass("toRemove");
                     }
-                    mover.animate({
-                        translate3d: "0, 0, 0"
-                    }, {
-                        duration: 200
-                    }).removeClass("toStar").removeClass("toRemove");
                 }
             }.bind(this), {
                 moving: function(dx, dy, mover){

@@ -21,23 +21,12 @@
   #{$property}: calc(#{$expression}); 
 } 
 
-@mixin gradient3($start,$mid,$end,$start-point,$mid-pos){
-	background: $start;
-	background: -moz-linear-gradient($start-point,  $start 0%, $mid $mid-pos, $end 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,$start), color-stop($mid-pos,$mid), color-stop(100%,$end));
-	background: -webkit-linear-gradient($start-point,  $start 0%,$mid $mid-pos,$end 100%);
-	background: -o-linear-gradient($start-point,  $start 0%,$mid $mid-pos,$end 100%);
-	background: -ms-linear-gradient($start-point,  $start 0%,$mid $mid-pos,$end 100%);
-	background: linear-gradient(to bottom,  $start 0%,$mid $mid-pos,$end 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$start', endColorstr='$end',GradientType=0 );
-}
-
-@mixin gradient($start, $end, $start-point){
-	background-image: -webkit-linear-gradient($start-point, $start, $end);
-	background-image: -moz-linear-gradient($start-point, $start, $end);
-	background-image: -ms-linear-gradient($start-point, $start, $end);
-	background-image: -o-linear-gradient($start-point, $start, $end);
-	background-image: linear-gradient($start-point, $start, $end);
+@mixin gradient($gradient...){
+	background-image: -webkit-linear-gradient($gradient);
+	background-image: -moz-linear-gradient($gradient);
+	background-image: -ms-linear-gradient($gradient);
+	background-image: -o-linear-gradient($gradient);
+	background-image: linear-gradient($gradient);
 }
 
 @mixin transition($transition){

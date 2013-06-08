@@ -20,42 +20,50 @@
         moving: null
     };
 
+    var allowClickTimer = 0, scrollElm;
+
     $("#main").on("touchmove", function(ev){
         if(!mover)return;
-        var t = ev.changedTouches[0],
+        var t = ev.touches[0],
             dx = t.clientX - sx,
             dy = t.clientY - sy;
-        if(dragstat === 1 && options.drag){
-            if(Math.abs(dy) > 10){
+        if(dragstat === 1){
+            if(Math.abs(dy) > 5){
                 dragstat = 2;
                 return;
-            }else if(Math.abs(dx) > 13){
+            }else if(Math.abs(dx) > 5){
                 dragstat = 3;
             }
         }
-        mover.css($.fx.cssPrefix + "transition-duration", "0");
-        if(dragstat === 3){
-            mover.animate({
-                translate3d: dx + "px, 0, 0"
-            }, 0);
-            options.moving && options.moving(dx, dy, mover);
-            ev.preventDefault();
+        if(options.drag){
+            mover.css($.fx.cssPrefix + "transition-duration", "0");
+            if(dragstat === 3){
+                mover.animate({
+                    translate3d: dx + "px, 0, 0"
+                }, 0);
+                options.moving && options.moving(dx, dy, mover);
+                ev.preventDefault();
+            }
         }
-    });
-
-    $("#main").on("touchend", function(ev){
-        var moved = dragstat === 3 || dragstat === 2;
+    }).on("touchend", function(ev){
         if(dragstat === 3){
             mover.css($.fx.cssPrefix + "transition-duration", "");
         }
-        dragstat = 0;
         var t = ev.changedTouches[0],
             dx = t.clientX - sx,
             dy = t.clientY - sy;
-        moveEnd && moveEnd(moved, mover, dx, dy);
+        moveEnd && moveEnd(dragstat, mover, dx, dy);
         moveEnd = null;
         mover = null;
+        dragstat = 0;
     });
+
+    dragger.setScrollElm = function(elm){
+        scrollElm = elm;
+        elm.on("scroll", function(){
+            if(dragstat) dragstat = 2;
+        });
+    };
 
     dragger.register = function(x, y, m, fn, prop){
         if(dragstat !== 0)return false;
@@ -77,11 +85,11 @@
     };
 
     dragger.touchClick = function(el, ev, cb){
-        var t = ev.originalEvent.changedTouches[0],
+        var t = ev.originalEvent.touches[0],
             sx = t.clientX,
             sy = t.clientY;
         dragger.register(sx, sy, el, function(moved){
-            if(!moved){
+            if(dragstat !== 2 && dragstat !== 3){
                 cb();
             }
         }, {
