@@ -20,38 +20,28 @@
     fetcher.fetch = function(){
         var d = new Deferred();
 
-        Deferred.when(lapi.getNews(), lapi.getEvents(), lapi.getModules(Math.round((Date.now() - lastFetched) / 60000)))
+        Deferred.when(lapi.getNews(), lapi.getEvents(), lapi.getModules(Math.ceil((Date.now() - lastFetched) / 60000)))
         .then(function(news, newsuc, newsobj, events, eventssuc, eventsobj, modules){
             lastFetched = Date.now();
             store.set("last", lastFetched);
-            console.log(news, events, modules);
+            var latestDate = null;
             var result = [];
             news.Results.forEach(function(r){
                 var id = "news-" + r.ID;
                 if(!fetched[id]){
                     fetched[id] = true;
+                    var date = new Date(r.CreatedDate_js);
                     result.push({
                         title: r.Title,
                         from: "IVLE",
                         content: r.Description,
-                        date: new Date(r.CreatedDate_js),
+                        date: date,
                         starred: false,
                         read: false
                     });
-                }
-            });
-            events.Results.forEach(function(e){
-                var id = "events-" + e.ID;
-                if(!fetched[id]){
-                    fetched[id] = true;
-                    result.push({
-                        title: e.Title,
-                        from: "Events",
-                        content: buildEventsContent(e),
-                        date: (new Date()),
-                        starred: false,
-                        read: false
-                    });
+                    if(!latestDate || latestDate < date){
+                        latestDate = date;
+                    }
                 }
             });
             modules.Results.forEach(function(m){
@@ -60,16 +50,41 @@
                     var id = code + "-" + a.ID;
                     if(!fetched[id]){
                         fetched[id] = true;
+                        var date = new Date(a.CreatedDate_js);
                         result.push({
                             title: a.Title,
                             from: code,
                             content: a.Description,
-                            date: new Date(a.CreatedDate_js),
+                            date: date,
                             read: a.isRead,
                             starred: false
                         });
+                        if(!a.isRead){
+                            if(!latestDate || latestDate < date){
+                                latestDate = date;
+                            }
+                        }
                     }
                 });
+            });
+            if(!latestDate){
+                latestDate = new Date();
+            }else{
+                latestDate = new Date(latestDate.getTime() - 1000);
+            }
+            events.Results.forEach(function(e){
+                var id = "events-" + e.ID;
+                if(!fetched[id]){
+                    fetched[id] = true;
+                    result.push({
+                        title: e.Title,
+                        from: "Events",
+                        content: buildEventsContent(e),
+                        date: latestDate,
+                        starred: false,
+                        read: false
+                    });
+                }
             });
             d.resolve(result);
             store.set("fetched", fetched);
