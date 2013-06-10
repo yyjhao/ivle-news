@@ -5,7 +5,9 @@
     var namespace = "yyj.ivle.";
 
     store.get = function(name){
-        return JSON.parse(localStorage.getItem(namespace + name));
+        var str = localStorage.getItem(namespace + name);
+        if(str != "undefined") return JSON.parse(str);
+        else return null;
     };
 
     store.set = function(name, val){

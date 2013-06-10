@@ -3,7 +3,8 @@
     var fetcher = namespace.dataFetcher = {};
 
     var fetched = store.get("fetched") || {},
-        lastFetched = parseInt(store.get("last"), 10) || 0;
+        lastFetched = parseInt(store.get("last"), 10) || 0,
+        username = store.get("username");
 
     var buildEventsContent = function(event){
         return "<p>" + [
@@ -15,6 +16,27 @@
             "<b>Contact: </b>" + event.Contact,
             event.Description
         ].join("</p>\n<p>") + "</p>";
+    };
+
+    fetcher.getUserName = function(callback){
+        if(username){
+            callback(username);
+        }else{
+            lapi.getUserName().done(function(data){
+                username = data;
+                username = username.split(" ").map(function(s){
+                    return s.charAt(0) + s.slice(1).toLowerCase();
+                }).join(" ");
+                store.set("username", username);
+                callback(username);
+            });
+        }
+    };
+
+    fetcher.logout = function(){
+        localStorage.clear();
+        location.hash = "";
+        location.reload();
     };
 
     fetcher.fetch = function(){

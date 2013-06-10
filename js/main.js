@@ -2,10 +2,7 @@
 (function(){
     // "use strict";
 
-    lapi.login();
-
     can.route(':filter');
-    // Delay routing until we initialized everything
     can.route.ready(false);
 
     // Models.News.create({
@@ -18,13 +15,18 @@
     // });
 
     // Initialize the app
-    Models.News.findAll({}).done(function (items) {
-        new Control('#main', {
-            news: items,
-            curNews: can.compute(null),
-            curNewsInd: can.compute(-1),
-            filter: can.route,
-            fetcher: dataFetcher
+    lapi.login();
+
+    dataFetcher.getUserName(function(username){
+        Models.News.findAll({}).done(function (items) {
+            new Control('#main', {
+                news: items,
+                curNews: can.compute(null),
+                curNewsInd: can.compute(-1),
+                filter: can.route,
+                fetcher: dataFetcher,
+                username: can.compute(username)
+            });
         });
     });
 

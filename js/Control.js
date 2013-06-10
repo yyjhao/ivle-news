@@ -7,7 +7,8 @@
             view: 'mainview',
             refreshStatus: can.compute(0),
             _wasFixed: false,
-            _fixedElm: null
+            _fixedElm: null,
+            username: can.compute("me")
         }
     }, {
         init: function(){
@@ -208,6 +209,20 @@
 
         'input search': function(el, ev){
             Models.News.query(el.val());
+        },
+
+        "#log-out touchstart": function(el, ev){
+            dragger.touchClick(el, ev, function(){
+                el.click();
+            });
+        },
+
+        "#log-out click": function(){
+            setTimeout(function(){
+                if(confirm("Sure?")){
+                    dataFetcher.logout();
+                }
+            }, 0);
         }
     });
 

@@ -14,42 +14,55 @@
 
 	</div>
 	<script type="text/ejs" id="mainview">
-		<div id="listivew" class="slidingView <%= curNews() ? '' : 'shown' %>" >
-			<div id="reload" class="<%= refreshStatus() === 2 ? 'hidden' : '' %>">
-				<span class='arrow <%= refreshStatus() === 1 ? "rotate" : "" %> '>&darr;</span>
-					<%= refreshStatus() === 0 ? "Pull down to reload" :
-						refreshStatus() === 1 ? "Release to refresh" : "" %>
+		<div id="mainView" class="slidingView <%= curNews() ? '' : 'shown' %>" >
+			<div id="listView" class='<%= can.route.attr("filter") === "config" ? "" : "current" %>'>
+				<div id="reload" class="<%= refreshStatus() === 2 ? 'hidden' : '' %>">
+					<span class='arrow <%= refreshStatus() === 1 ? "rotate" : "" %> '>&darr;</span>
+						<%= refreshStatus() === 0 ? "Pull down to reload" :
+							refreshStatus() === 1 ? "Release to refresh" : "" %>
+				</div>
+				<div class='mainscroll'>
+					<div class="loading <%= refreshStatus() === 2 ? 'shown' : '' %>"><div class='symbol'></div>Loading...</div>
+					<ul id="list">
+						<li class='searchbar'>
+							<input type='search' placeholder='search...' incremental/>
+						</li>
+						<li class="noitem <%= news.countMatches() > 0 ? 'hidden' : "" %>">
+							There are no items.
+						</li>
+						<% news.each(function(val) { %>
+						    <li <%= (el) -> el.data('info', val) %> class='newsItem <%= val.attr("starred") ? "starred" : "" %> <%= val.attr("read") ? "read" : "" %> <%= val.matches() ? "" : "hidden" %>' >
+						    	<div class='title <%= val.attr("title").length > 35 ? "smaller2" : val.attr("title").length > 23 ? "smaller" : "" %>'><%= val.attr("title") %></div>
+						    	<div class='date'> <%= val.getFriendlyDate() %> </div>
+						    	<div class='from'> <%= val.attr("from") %> </div>
+						    	<div class='star'>&#9733;</div>
+						    	<div class='delete'>x</div>
+						    </li>
+						<% }); %>
+						<li id='bottom'></li>
+					</ul>
+				</div>
 			</div>
-			<div class='mainscroll'>
-				<div class="loading <%= refreshStatus() === 2 ? 'shown' : '' %>"><div class='symbol'></div>Loading...</div>
-				<ul id="list">
-					<li class='searchbar'>
-						<input type='search' placeholder='search...' incremental/>
-					</li>
-					<li class="noitem <%= news.countMatches() > 0 ? 'hidden' : "" %>">
-						There are no items.
-					</li>
-					<% news.each(function(val) { %>
-					    <li <%= (el) -> el.data('info', val) %> class='newsItem <%= val.attr("starred") ? "starred" : "" %> <%= val.attr("read") ? "read" : "" %> <%= val.matches() ? "" : "hidden" %>' >
-					    	<div class='title <%= val.attr("title").length > 35 ? "smaller2" : val.attr("title").length > 23 ? "smaller" : "" %>'><%= val.attr("title") %></div>
-					    	<div class='date'> <%= val.getFriendlyDate() %> </div>
-					    	<div class='from'> <%= val.attr("from") %> </div>
-					    	<div class='star'>&#9733;</div>
-					    	<div class='delete'>x</div>
-					    </li>
-					<% }); %>
-					<li id='bottom'></li>
-				</ul>
+			<div id="configView" class='<%= can.route.attr("filter") === "config" ? "current" : "" %>'>
+				<div>
+					Currently logged in as
+					<%= username() %>.
+				</div>
+				<button id='log-out'>Logout</button>
 			</div>
 			<footer class='bottombar'>
 				<a class='showstar <%= can.route.attr("filter") ==="onlyStarred" ? "current" : "" %>' href='#onlyStarred'>
 					<div class="icon">&#9733;</div>
 					<div class='name'>Starred</div>
 				</a>
-				<a class='showall <%= can.route.attr("filter") === "onlyStarred" ? "" : "current" %>' href="#">
+				<a class='showall <%= !can.route.attr("filter") ? "current" : "" %>' href="#">
 					<div class="icon">&#9650;</div>
 					<div class='name'>All</div>
 					<div class='count' <%= news.unread() ? "" : "hidden" %> ><%= news.unread() %></div>
+				</a>
+				<a class='config <%= can.route.attr("filter") === "config" ? "current" : "" %>' href="#config">
+					<div class="icon">&#9881</div>
+					<div class='name'>Config</div>
 				</a>
 			</footer>
 		</div>
