@@ -16,6 +16,10 @@
         },
 
         '{curNews} change': function(val, ev){
+            var elm = $(".perItem.current .mainarea")[0];
+            if(elm){
+                elm.scrollTop = 0;
+            }
             if(val()){
                 val().attr("read", true);
                 val().save();
