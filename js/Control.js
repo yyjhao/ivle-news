@@ -5,7 +5,9 @@
     var Control = namespace.Control = can.Control({
         defaults: {
             view: 'mainview',
-            refreshStatus: can.compute(0)
+            refreshStatus: can.compute(0),
+            _wasFixed: false,
+            _fixedElm: null
         }
     }, {
         init: function(){
@@ -13,10 +15,23 @@
             dragger.setScrollElm($(".mainscroll"));
         },
 
-        '{curNews} change': function(val){
+        '{curNews} change': function(val, ev){
             if(val()){
                 val().attr("read", true);
                 val().save();
+                if(!ev.data[1]){
+                    $(".perItem").css("-webkit-transition", "none");
+                    this.options._wasFixed = true;
+                } else if(this.options._wasFixed){
+                    $(".perItem").css("-webkit-transition", "");
+                    this.options.wasFixed = false;
+                }
+                if(this.options._fixedElm){
+                    this.options._fixedElm.css("-webkit-transform", "");
+                    this.options._fixedElm = null;
+                }
+            }else{
+                this.options._fixedElm = $(".perItem.current").css("-webkit-transform", "translate3d(0, 0, 0)");
             }
         },
 
@@ -78,6 +93,10 @@
             }.bind(this), {
                 drag: null
             });
+        },
+
+        '.bottombar a click': function(el){
+            el.addClass("current");
         },
 
         '.newsItem touchstart': function(el, ev){
