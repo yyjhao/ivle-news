@@ -17,19 +17,27 @@
     // Initialize the app
     lapi.login();
 
-    dataFetcher.getUserName(function(username){
-        Models.News.findAll({}).done(function (items) {
-            new Control('#main', {
-                news: items,
-                curNews: can.compute(null),
-                curNewsInd: can.compute(-1),
-                filter: can.route,
-                fetcher: dataFetcher,
-                username: can.compute(username)
+    lapi.validate().done(function(data){
+        if(data.Success){
+            dataFetcher.getUserName(function(username){
+                Models.News.findAll({}).done(function (items) {
+                    new Control('#main', {
+                        news: items,
+                        curNews: can.compute(null),
+                        curNewsInd: can.compute(-1),
+                        filter: can.route,
+                        fetcher: dataFetcher,
+                        username: can.compute(username)
+                    });
+                });
+                can.route.ready(true);
             });
-        });
+        }else{
+            alert("need to relogin");
+            dataFetcher.relogin();
+        }
+    }).fail(function(){
+        alert("network problem bro");
+        location.reload();
     });
-
-    // Now we can start routing
-    can.route.ready(true);
 })();

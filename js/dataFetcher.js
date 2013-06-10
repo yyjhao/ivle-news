@@ -39,6 +39,12 @@
         location.reload();
     };
 
+    fetcher.relogin = function(){
+        lapi.cancelToken();
+        location.hash = "";
+        location.reload();
+    };
+
     fetcher.fetch = function(){
         var d = new Deferred();
 

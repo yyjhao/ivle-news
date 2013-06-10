@@ -570,7 +570,7 @@ $itemFooterheight: 40px;
 
         &:active{
             @include gradient(top, darken(#feb645, 20), darken(#f1e767, 20));
-            box-shadow: inset 0 0 3px black, 0 1px 4px rgba(white, 0.3);
+            box-shadow: inset 0 0 2px black, 0 1px 4px rgba(white, 0.3);
 
             padding-top: 1.1em;
             padding-bottom: 0.9em;

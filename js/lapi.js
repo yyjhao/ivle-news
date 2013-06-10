@@ -76,4 +76,8 @@
             AcadYear: "2012/2013"
         });
     };
+
+    lapi.cancelToken = function(){
+        store.set("token", "");
+    };
 })(window.lapi || (window.lapi = {}), store);

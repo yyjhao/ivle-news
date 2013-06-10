@@ -219,7 +219,7 @@
 
         "#log-out click": function(){
             setTimeout(function(){
-                if(confirm("Sure?")){
+                if(confirm("Sure?\n Your data gon' get lost bro!")){
                     dataFetcher.logout();
                 }
             }, 0);
