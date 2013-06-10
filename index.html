@@ -15,8 +15,8 @@
 	</div>
 	<script type="text/ejs" id="mainview">
 		<div id="listivew" class="slidingView <%= curNews() ? '' : 'shown' %>" >
-			<div id="reload" class="<%= refreshStatus() === 1 ? 'enough' : refreshStatus() === 2 ? 'hidden' : '' %>">
-				<span class='arrow'>&darr;</span>
+			<div id="reload" class="<%= refreshStatus() === 2 ? 'hidden' : '' %>">
+				<span class='arrow <%= refreshStatus() === 1 ? "rotate" : "" %> '>&darr;</span>
 					<%= refreshStatus() === 0 ? "Pull down to reload" :
 						refreshStatus() === 1 ? "Release to refresh" : "" %>
 			</div>

@@ -239,7 +239,7 @@ body{
         @include transition-duration(0.3s);
     }
 
-    &.enough .arrow{
+    .arrow.rotate{
         @include transform(rotate(180deg));
     }
 
