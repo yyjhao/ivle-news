@@ -58,10 +58,10 @@
         var t = ev.changedTouches[0],
             dx = t.clientX - sx,
             dy = t.clientY - sy;
-        mover = null;
-        dragstat = 0;
         moveEnd && moveEnd(willClick, dragstat, mover, dx, dy, ev);
         moveEnd = null;
+        mover = null;
+        dragstat = 0;
     });
 
     dragger.setScrollElm = function(elm){
