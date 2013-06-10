@@ -193,14 +193,11 @@
                 sy = t.clientY;
             var mover = $('#main');
             dragger.register(sx, sy, mover, function(moved, mover, dx, dy){
-                mover.animate({
-                    translate3d: "0, 0, 0"
-                }, 300, function(){
-                    mover.css(fx.cssPrefix + "transition", "");
-                });
                 if(dx > 100){
                     this.options.curNews(null);
                 }
+                mover.css($.fx.cssPrefix + "transition-duration", "");
+                mover.css($.fx.cssPrefix + "transform", "");
             }.bind(this));
         },
 

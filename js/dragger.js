@@ -33,14 +33,12 @@
                 return;
             }else if(Math.abs(dx) > 5){
                 dragstat = 3;
+                mover.css($.fx.cssPrefix + "transition-duration", "0");
             }
         }
         if(options.drag){
-            mover.css($.fx.cssPrefix + "transition-duration", "0");
             if(dragstat === 3){
-                mover.animate({
-                    translate3d: dx + "px, 0, 0"
-                }, 0);
+                mover.css($.fx.cssPrefix + "transform", "translate3d(" + dx + "px, 0, 0)");
                 options.moving && options.moving(dx, dy, mover);
                 ev.preventDefault();
             }
@@ -56,6 +54,7 @@
         moveEnd = null;
         mover = null;
         dragstat = 0;
+        mover.css($.fx.cssPrefix + "transition-duration", "");
     });
 
     dragger.setScrollElm = function(elm){

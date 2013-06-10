@@ -53,6 +53,8 @@ body{
     height: 100%;
     width: 100%;
     @include transform(translateZ(0));
+    @include transition-duration(0.3s);
+    @include transition-ease(ease-out);
 
     &>*{
         position: absolute;
@@ -62,7 +64,7 @@ body{
         right: 0; 
         @include transition-duration(0.3s);
         @include transform(translateX(-100%));
-        @include transition-ease(ease-in);
+        @include transition-ease(ease-out);
 
         &.shown{
             @include transform(translateX(0));

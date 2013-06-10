@@ -47,11 +47,11 @@
 
 
 @mixin transition-ease($ease){
-    -webkit-transition-duration: $ease;
-    -moz-transition-duration: $ease;
-    -ms-transition-duration: $ease;
-    -o-transition-duration: $ease;
-    transition-duration: $ease;
+    -webkit-transition-timing-function: $ease;
+    -moz-transition-timing-function: $ease;
+    -ms-transition-timing-function: $ease;
+    -o-transition-timing-function: $ease;
+    transition-timing-function: $ease;
 }
 
 
