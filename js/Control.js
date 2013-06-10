@@ -17,7 +17,6 @@
             if(val()){
                 val().attr("read", true);
                 val().save();
-                $(".mainarea")[0].scrollTop = 0;
             }
         },
 
@@ -151,6 +150,18 @@
             dragger.touchClick(el, ev, function(){
                 el.click();
             });
+        },
+
+        '.mainarea touchstart': function(el, ev){
+            // copied from https://github.com/joelambert/ScrollFix
+            var event = ev.originalEvent, elem = el[0];
+            var startY = event.touches[0].pageY,
+                startTopScroll = elem.scrollTop;
+
+            if(startTopScroll <= 0) elem.scrollTop = 1;
+
+            if(startTopScroll + elem.offsetHeight >= elem.scrollHeight)
+                elem.scrollTop = elem.scrollHeight - elem.offsetHeight - 1;
         },
 
         'header touchstart': function(el, ev){

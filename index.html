@@ -54,20 +54,22 @@
 			</footer>
 		</div>
 		<div id="itemView" class="slidingView <%= curNews() ? 'shown' : '' %>">
-			<% if (curNews()) { %>
-				<%= (el) -> el.data('info', curNews()) %>
-			<% } %>
-			<div class='mainarea'>
-				<header>
-					<div class="star touchButton"><%== curNews() && curNews().attr("starred") ? "&#9733" : "&#9734;" %></div>
-					<h2><%= curNews() ? curNews().attr("title") : ''%></h1>
-					<div><%= curNews() ? curNews().attr("from") : ''%></div>
-					<div><%== curNews() ? curNews().getFriendlyDate() + "<br />" + curNews().getDetailedDate() : ''%></div>
-				</header>
-				<div class='content'>
-					<%== curNews() ? curNews().attr("content") : ''%>
+			<% news.each(function(val) { %>
+			<li <%= (el) -> el.data('info', val) %> class="perItem <%= val === curNews() ? 'current' : '' %>">
+				<div class='mainarea'>
+					<header>
+						<div class="star touchButton"><%== val.attr("starred") ? "&#9733;" : "&#9734;" %></div>
+						<h2><%= val.attr("title") %></h1>
+						<div><%= val.attr("from") %></div>
+						<div><%== val.getFriendlyDate() + "<br />" + val.getDetailedDate()%></div>
+					</header>
+					<div class='content'>
+						<%== val.attr("content") %>
+					</div>
 				</div>
-			</div>
+			</li>
+			</ul>
+			<% }); %>
 			<footer>
 				<span class="next touchButton <%= curNewsInd() + 1 >= news.attr('length') ? 'disabled' : '' %>">&#9660;</span>
 				<span class="previous touchButton <%= curNewsInd() <= 0 ? 'disabled' : '' %>">&#9650;</span>
