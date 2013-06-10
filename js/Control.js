@@ -2,6 +2,17 @@
 (function(namespace){
     'use strict';
 
+    var scrollFix = function(elm, event){
+        // copied from https://github.com/joelambert/ScrollFix
+        var startY = event.touches[0].pageY,
+            startTopScroll = elem.scrollTop;
+
+        if(startTopScroll <= 0) elem.scrollTop = 1;
+
+        if(startTopScroll + elem.offsetHeight >= elem.scrollHeight)
+            elem.scrollTop = elem.scrollHeight - elem.offsetHeight - 1;
+    };
+
     var Control = namespace.Control = can.Control({
         defaults: {
             view: 'mainview',
@@ -64,15 +75,7 @@
         },
 
         '.mainscroll touchstart': function(el, ev){
-            // copied from https://github.com/joelambert/ScrollFix
-            var event = ev.originalEvent, elem = el[0];
-            var startY = event.touches[0].pageY,
-                startTopScroll = elem.scrollTop;
-
-            if(startTopScroll <= 0) elem.scrollTop = 1;
-
-            if(startTopScroll + elem.offsetHeight >= elem.scrollHeight)
-                elem.scrollTop = elem.scrollHeight - elem.offsetHeight - 1;
+            scrollFix(el[0], ev.originalEvent);
         },
 
         '.mainscroll touchmove': function(el, ev){
@@ -182,15 +185,7 @@
         },
 
         '.mainarea touchstart': function(el, ev){
-            // copied from https://github.com/joelambert/ScrollFix
-            var event = ev.originalEvent, elem = el[0];
-            var startY = event.touches[0].pageY,
-                startTopScroll = elem.scrollTop;
-
-            if(startTopScroll <= 0) elem.scrollTop = 1;
-
-            if(startTopScroll + elem.offsetHeight >= elem.scrollHeight)
-                elem.scrollTop = elem.scrollHeight - elem.offsetHeight - 1;
+            scrollFix(el[0], ev.originalEvent);
         },
 
         'header touchstart': function(el, ev){
@@ -223,6 +218,10 @@
                     dataFetcher.logout();
                 }
             }, 0);
+        },
+
+        '#configView touchstart': function(el, ev){
+            scrollFix(el[0], ev.originalEvent);
         }
     });
 

@@ -44,11 +44,13 @@
 				</div>
 			</div>
 			<div id="configView" class='<%= can.route.attr("filter") === "config" ? "current" : "" %>'>
-				<div>
-					Currently logged in as
-					<%= username() %>.
+				<div class='content'>
+					<div>
+						Currently logged in as
+						<%= username() %>.
+					</div>
+					<button id='log-out'>Logout</button>
 				</div>
-				<button id='log-out'>Logout</button>
 			</div>
 			<footer class='bottombar'>
 				<a class='showstar <%= can.route.attr("filter") ==="onlyStarred" ? "current" : "" %>' href='#onlyStarred'>
