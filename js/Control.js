@@ -107,10 +107,15 @@
             var t = ev.originalEvent.changedTouches[0],
                 sx = t.clientX,
                 sy = t.clientY;
-            dragger.register(sx, sy, el, function(dragstat, mover, dx, dy){
-                if(dragstat !== 3 && dragstat !== 2){
+            dragger.register(sx, sy, el, function(willClick, dragstat, mover, dx, dy){
+                if(willClick){
                     this.options.curNews(el.data('info'));
                     this.options.curNewsInd(this.options.news.indexOf(this.options.curNews()));
+                    mover.animate({
+                        translate3d: "0, 0, 0"
+                    }, {
+                        duration: 200
+                    }).removeClass("toStar").removeClass("toRemove");
                 }else if(dragstat === 3){
                     if(dx < -200){
                         mover.animate({
@@ -192,7 +197,7 @@
                 sx = t.clientX,
                 sy = t.clientY;
             var mover = $('#main');
-            dragger.register(sx, sy, mover, function(moved, mover, dx, dy){
+            dragger.register(sx, sy, mover, function(willClick, dragstat, mover, dx, dy){
                 if(dx > 100){
                     this.options.curNews(null);
                 }

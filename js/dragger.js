@@ -8,6 +8,9 @@
 
     var mover = null;
 
+    var willClick = false,
+        clickDelta = 15;
+
     var drag = true;
 
     var defaults = {
@@ -20,10 +23,11 @@
         moving: null
     };
 
-    var allowClickTimer = 0, scrollElm;
+    var allowClickTimer = 0, scrollElm, scrolling = false;
 
     $("#main").on("touchmove", function(ev){
         if(!mover)return;
+        scrolling = false;
         var t = ev.touches[0],
             dx = t.clientX - sx,
             dy = t.clientY - sy;
@@ -36,6 +40,9 @@
                 mover.css($.fx.cssPrefix + "transition-duration", "0");
             }
         }
+        if(Math.abs(dy) > clickDelta || Math.abs(dx) > clickDelta){
+            willClick = false;
+        }
         if(options.drag){
             if(dragstat === 3){
                 mover.css($.fx.cssPrefix + "transform", "translate3d(" + dx + "px, 0, 0)");
@@ -47,10 +54,11 @@
         if(dragstat === 3){
             mover.css($.fx.cssPrefix + "transition-duration", "");
         }
+        willClick &= (!scrolling);
         var t = ev.changedTouches[0],
             dx = t.clientX - sx,
             dy = t.clientY - sy;
-        moveEnd && moveEnd(dragstat, mover, dx, dy);
+        moveEnd && moveEnd(willClick, dragstat, mover, dx, dy);
         moveEnd = null;
         mover = null;
         dragstat = 0;
@@ -60,6 +68,7 @@
         scrollElm = elm;
         elm.on("scroll", function(){
             if(dragstat) dragstat = 2;
+            scrolling = true;
         });
     };
 
@@ -80,14 +89,17 @@
                 options[i] = prop[i];
             }
         }
+
+        willClick = true;
+        scrolling = false;
     };
 
     dragger.touchClick = function(el, ev, cb){
         var t = ev.originalEvent.touches[0],
             sx = t.clientX,
             sy = t.clientY;
-        dragger.register(sx, sy, el, function(moved){
-            if(dragstat !== 2 && dragstat !== 3){
+        dragger.register(sx, sy, el, function(){
+            if(willClick){
                 cb();
             }
         }, {
