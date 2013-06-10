@@ -54,7 +54,6 @@
         moveEnd = null;
         mover = null;
         dragstat = 0;
-        mover.css($.fx.cssPrefix + "transition-duration", "");
     });
 
     dragger.setScrollElm = function(elm){
