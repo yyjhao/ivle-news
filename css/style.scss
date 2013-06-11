@@ -628,6 +628,7 @@ $itemFooterheight: 40px;
     overflow-y: auto;
 
     -webkit-overflow-scrolling: touch;
+    -webkit-user-select: none;
 
     .content{
         height: 101%;
