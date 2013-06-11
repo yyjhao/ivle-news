@@ -8,17 +8,17 @@
     var apiKey = "k0z3B5Ng9rhy3MKVAKsGG",
         apiDomain = "https://ivle.nus.edu.sg/",
         apiUrl = apiDomain + "api/lapi.svc/",
-        loginURL = apiDomain + "api/login/?apikey=" + apiKey + "&url=" + escape(window.location);
+        loginURL = apiDomain + "api/login/?apikey=" + apiKey + "&url=" + escape(window.location + "#callback");
 
     var onlyChanges = true,
         lastUpdate = store && store.get("token") || 0;
 
-    var parseLocationForToken = function(){
-        var match = (/\?token=([^?=\/&]*)/).exec(window.location);
+    var parseLocationForToken = function(l){
+        var match = (/\?token=([^?=\/&]*)/).exec(l);
         return match && match[1] || null;
     };
 
-    var token = parseLocationForToken() || (store && store.get("token"));
+    var token = store && store.get("token");
 
     var getService = function(service, property){
         // note that sometimes the api use AuthToken
@@ -32,11 +32,23 @@
         return $.getJSON(url);
     };
 
-    lapi.login = function(){
+    lapi.login = function(fn){
         if(!token){
-            window.location = loginURL;
+            fn();
+            var w = $("#login iframe")[0],
+                defer = $.Deferred();
+            w.src = loginURL;
+            w.onload = function(){
+                if(w.contentDocument){
+                    token = parseLocationForToken(w.contentDocument.location.href);
+                    store && store.set("token", token);
+                    defer.resolve();
+                }
+            };
+            return defer;
         }else{
             store && store.set("token", token);
+            return $.Deferred().resolve();
         }
     };
 

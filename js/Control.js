@@ -2,7 +2,7 @@
 (function(namespace){
     'use strict';
 
-    var scrollFix = function(elm, event){
+    var scrollFix = function(elem, event){
         // copied from https://github.com/joelambert/ScrollFix
         var startY = event.touches[0].pageY,
             startTopScroll = elem.scrollTop;

@@ -31,6 +31,44 @@ body{
     font-family: sans-serif;
 }
 
+.notloggedin{
+    #login{
+        @include transform(translateY(0%));
+    }
+
+    #main{
+        @include transform(translateY(-100%));
+    }
+}
+
+#login{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    @include transform(translateY(100%));
+    @include transition-duration(0.3s);
+
+    h1{
+        color: #feb645;
+        text-align: center;
+        text-shadow: 0 0 10px #feb645;
+    }
+
+
+    iframe{
+        border: none;
+        display: block;
+        margin: 0 auto;
+        width: 80%;
+        background: rgba(white, 0.6);
+        border-radius: 10px;
+        box-shadow: 0 0 10px white;
+    }
+}
+
 .touchButton{
     -webkit-user-select: none;
 }
@@ -49,7 +87,9 @@ body{
 }
 
 #main{
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
     height: 100%;
     width: 100%;
     @include transform(translateZ(0));
