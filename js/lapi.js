@@ -8,7 +8,8 @@
     var apiKey = "k0z3B5Ng9rhy3MKVAKsGG",
         apiDomain = "https://ivle.nus.edu.sg/",
         apiUrl = apiDomain + "api/lapi.svc/",
-        loginURL = apiDomain + "api/login/?apikey=" + apiKey + "&url=" + escape(window.location + "#callback");
+        loginURL = apiDomain + "api/login/?apikey=" + apiKey;
+    if(!isCordova) loginURL += "&url=" + escape(window.location + "#callback");
 
     var onlyChanges = true,
         lastUpdate = store && store.get("token") || 0;
@@ -19,6 +20,7 @@
     };
 
     var token = store && store.get("token");
+    if(token === "") token = null;
 
     var getService = function(service, property){
         // note that sometimes the api use AuthToken
@@ -38,13 +40,24 @@
             var w = $("#login iframe")[0],
                 defer = $.Deferred();
             w.src = loginURL;
-            w.onload = function(){
-                if(w.contentDocument){
-                    token = parseLocationForToken(w.contentDocument.location.href);
-                    store && store.set("token", token);
-                    defer.resolve();
-                }
-            };
+            if(isCordova){
+                w.onload = function(){
+                    var str = w.contentDocument.body.innerHTML;
+                    if(str.indexOf("<") === -1){
+                        token = str;
+                        store && store.set("token", token);
+                        defer.resolve();
+                    }
+                };
+            }else{
+                w.onload = function(){
+                    if(w.contentDocument){
+                        token = parseLocationForToken(w.contentDocument.location.href);
+                        store && store.set("token", token);
+                        defer.resolve();
+                    }
+                };
+            }
             return defer;
         }else{
             store && store.set("token", token);

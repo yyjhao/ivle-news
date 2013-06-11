@@ -24,4 +24,6 @@ if (!Function.prototype.bind) {
   };
 }
 
+window.isCordova = window.cordova || window.PhoneGap || window.phonegap;
+
 // localStorage.clear();

@@ -40,8 +40,8 @@
                     can.route.ready(true);
                 });
             }else{
-                alert("need to relogin");
-                dataFetcher.relogin();
+                // alert("need to relogin");
+                // dataFetcher.relogin();
             }
         }).fail(function(){
             alert("network problem bro");
