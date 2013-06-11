@@ -70,6 +70,7 @@
                     this.options.news.sort(function(a, b){
                         return b.attr("date") - a.attr("date");
                     });
+                    $("a.showall").click();
                 }.bind(this));
             }
         },
