@@ -38,6 +38,7 @@
 
     fetcher.check = function(){
         var defer = $.Deferred();
+        var isNew = false;
         lapi.validate().done(function(data){
             if(data.Success){
                 lapi.getUserId().done(function(data){
@@ -48,9 +49,10 @@
                         userId = data;
                         store.set("userid", userId);
                         username = null;
+                        isNew = true;
                     }
                     dataFetcher.getUserName(function(username){
-                        defer.resolve(username, true);
+                        defer.resolve(username, true, isNew);
                     });
                 });
             }else{
