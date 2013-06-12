@@ -32,7 +32,7 @@
             dx = t.clientX - sx,
             dy = t.clientY - sy;
         if(dragstat === 1){
-            if(Math.abs(dy) > 5){
+            if(Math.abs(dy) > 15){
                 dragstat = 2;
                 return;
             }else if(Math.abs(dx) > 5){
