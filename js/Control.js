@@ -46,8 +46,6 @@
                     this.options._fixedElm.css("-webkit-transform", "");
                     this.options._fixedElm = null;
                 }
-            }else{
-                this.options._fixedElm = $(".perItem.current").css("-webkit-transform", "translate3d(0, 0, 0)");
             }
         },
 
@@ -195,6 +193,7 @@
                 sy = t.clientY;
             var mover = $('#main');
             dragger.register(sx, sy, mover, function(willClick, dragstat, mover, dx, dy){
+                this.options._fixedElm = $(".perItem.current").css("-webkit-transform", "translate3d(0, 0, 0)");
                 if(dx > 100){
                     this.options.curNews(null);
                 }
