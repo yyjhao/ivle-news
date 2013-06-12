@@ -130,8 +130,10 @@
                         },{
                             duration: 200,
                             complete: function(){
-                                el.data("info").destroy();
-                            }
+                                var n = el.data("info");
+                                this.options.news.removeAttr(this.options.news.indexOf(n));
+                                n.destroy();
+                            }.bind(this)
                         }).removeClass("toStar").removeClass("toRemove");
                     }else{
                         if(dx > 150){
