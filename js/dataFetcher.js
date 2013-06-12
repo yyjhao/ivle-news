@@ -50,7 +50,7 @@
                         username = null;
                     }
                     dataFetcher.getUserName(function(username){
-                        defer.resolve(username);
+                        defer.resolve(username, true);
                     });
                 });
             }else{
@@ -60,10 +60,7 @@
                 });
             }
         }).fail(function(){
-            defer.reject({
-                type: 0,
-                str: "No network connection."
-            });
+            defer.resolve(username, false);
         });
         return defer.promise();
     };
@@ -79,6 +76,12 @@
 
         Deferred.when(lapi.getNews(), lapi.getEvents(), lapi.getModules(Math.ceil((Date.now() - lastFetched) / 60000)))
         .then(function(news, newsuc, newsobj, events, eventssuc, eventsobj, modules){
+            if(modules.Comments.toLowerCase().indexOf("invalid") !== -1){
+                d.reject({
+                    type: 0
+                });
+                return;
+            }
             lastFetched = Date.now();
             store.set("last", lastFetched);
             var latestDate = null;
@@ -145,6 +148,8 @@
             });
             d.resolve(result);
             store.set("fetched", fetched);
+        }).fail(function(){
+            d.resolve([]);
         });
         return d.promise();
     };

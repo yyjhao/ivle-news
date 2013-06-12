@@ -23,7 +23,10 @@
             $('body').addClass("notloggedin");
         }).done(function(){
             $('body').removeClass("notloggedin");
-            dataFetcher.check().done(function(username){
+            dataFetcher.check().done(function(username, network){
+                if(!network){
+                    alert("Network connection is down.");
+                }
                 Models.News.findAll({}).done(function (items) {
                     new Control('#main', {
                         news: items,
@@ -38,14 +41,16 @@
                 can.route.ready(true);
             }).fail(function(error){
                 if(error.type === 1){
-                    alert("Login expired, please login again.");
-                    lapi.clearToken();
-                    init();
-                }else{
-                    alert(error.str);
+                    loginExpired();
                 }
             });
         });
+    };
+
+    window.loginExpired = function(){
+        alert("Login expired, please login again.");
+        lapi.clearToken();
+        init();
     };
 
     init();
