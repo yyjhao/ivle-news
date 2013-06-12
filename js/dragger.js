@@ -95,8 +95,10 @@
     };
 
     dragger.abandon = function(){
-        mover.css($.fx.cssPrefix + "transition-duration", "");
-        mover.css($.fx.cssPrefix + "transform", "");
+        if(mover){
+            mover.css($.fx.cssPrefix + "transition-duration", "");
+            mover.css($.fx.cssPrefix + "transform", "");
+        }
         moveEnd = null;
         mover = null;
         dragstat = 0;
