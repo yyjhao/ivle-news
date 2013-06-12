@@ -12,6 +12,12 @@ can.Model('can.Model.LocalStorage', {
 		}
 	},
 
+	destoryAll: function(){
+		this.localStore(function(todos){
+			todos.length = 0;
+		});
+	},
+
 	updateAll: function(newdata){
 		this.localStore(function(todos){
 			todos.length = 0;

@@ -34,10 +34,10 @@
         return $.getJSON(url);
     };
 
-    lapi.login = function(fn){
+    lapi.login = function(iframe, fn){
         if(!token){
             fn();
-            var w = $("#login iframe")[0],
+            var w = iframe,
                 defer = $.Deferred();
             w.src = loginURL;
             if(isCordova){
@@ -102,7 +102,8 @@
         });
     };
 
-    lapi.cancelToken = function(){
+    lapi.clearToken = function(){
         store.set("token", "");
+        token = null;
     };
 })(window.lapi || (window.lapi = {}), store);

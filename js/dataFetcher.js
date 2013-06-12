@@ -1,10 +1,13 @@
 
 (function(namespace, lapi, store){
+    "use strict";
+
     var fetcher = namespace.dataFetcher = {};
 
     var fetched = store.get("fetched") || {},
         lastFetched = parseInt(store.get("last"), 10) || 0,
-        username = store.get("username");
+        username = store.get("username"),
+        userId = store.get("userid");
 
     var buildEventsContent = function(event){
         return "<p>" + [
@@ -33,14 +36,40 @@
         }
     };
 
-    fetcher.logout = function(){
-        localStorage.clear();
-        location.hash = "";
-        location.reload();
+    fetcher.check = function(){
+        var defer = $.Deferred();
+        lapi.validate().done(function(data){
+            if(data.Success){
+                lapi.getUserId().done(function(data){
+                    if(data != userId){
+                        Models.News.destoryAll();
+                        store.set("fetched", {});
+                        store.set("last", 0);
+                        userId = data;
+                        store.set("userid", userId);
+                        username = null;
+                    }
+                    dataFetcher.getUserName(function(username){
+                        defer.resolve(username);
+                    });
+                });
+            }else{
+                defer.reject({
+                    type: 1,
+                    str: "Login expired"
+                });
+            }
+        }).fail(function(){
+            defer.reject({
+                type: 0,
+                str: "No network connection."
+            });
+        });
+        return defer.promise();
     };
 
-    fetcher.relogin = function(){
-        lapi.cancelToken();
+    fetcher.logout = function(){
+        localStorage.clear();
         location.hash = "";
         location.reload();
     };

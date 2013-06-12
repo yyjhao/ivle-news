@@ -134,6 +134,7 @@
                         if(dx > 150){
                             var n = el.data("info");
                             n.attr("starred", !n.attr("starred"));
+                            n.save();
                         }
                         mover.animate({
                             translate3d: "0, 0, 0"

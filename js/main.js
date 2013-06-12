@@ -18,34 +18,35 @@
         return;
     }
 
-    // Initialize the app
-    lapi.login(function(){
-        $('body').addClass("notloggedin");
-    }).done(function(){
-        $('body').removeClass("notloggedin");
-        lapi.validate().done(function(data){
-            if(data.Success){
-                dataFetcher.getUserName(function(username){
-                    Models.News.findAll({}).done(function (items) {
-                        new Control('#main', {
-                            news: items,
-                            curNews: can.compute(null),
-                            curNewsInd: can.compute(-1),
-                            filter: can.route,
-                            fetcher: dataFetcher,
-                            username: can.compute(username)
-                        });
-                        $("a.showall").click();
+    var init = function(){
+        lapi.login($("#login iframe")[0], function(){
+            $('body').addClass("notloggedin");
+        }).done(function(){
+            $('body').removeClass("notloggedin");
+            dataFetcher.check().done(function(username){
+                Models.News.findAll({}).done(function (items) {
+                    new Control('#main', {
+                        news: items,
+                        curNews: can.compute(null),
+                        curNewsInd: can.compute(-1),
+                        filter: can.route,
+                        fetcher: dataFetcher,
+                        username: can.compute(username)
                     });
-                    can.route.ready(true);
+                    $("a.showall").click();
                 });
-            }else{
-                alert("need to relogin");
-                dataFetcher.relogin();
-            }
-        }).fail(function(){
-            alert("network problem bro");
-            location.reload();
+                can.route.ready(true);
+            }).fail(function(error){
+                if(error.type === 1){
+                    alert("Login expired, please login again.");
+                    lapi.clearToken();
+                    init();
+                }else{
+                    alert(error.str);
+                }
+            });
         });
-    });
+    };
+
+    init();
 })();
