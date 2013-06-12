@@ -94,6 +94,14 @@
         scrolling = false;
     };
 
+    dragger.abandon = function(){
+        mover.css($.fx.cssPrefix + "transition-duration", "");
+        mover.css($.fx.cssPrefix + "transform", "");
+        moveEnd = null;
+        mover = null;
+        dragstat = 0;
+    };
+
     dragger.touchClick = function(el, ev, cb){
         var t = ev.originalEvent.touches[0],
             sx = t.clientX,

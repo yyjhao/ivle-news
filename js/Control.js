@@ -69,6 +69,7 @@
                         return b.attr("date") - a.attr("date");
                     });
                     $("a.showall").click();
+                    dragger.abandon();
                 }.bind(this)).fail(function(error){
                     this.options.refreshStatus(0);
                     loginExpired();
