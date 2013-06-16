@@ -9,8 +9,9 @@
         apiDomain = "https://ivle.nus.edu.sg/",
         apiUrl = apiDomain + "api/lapi.svc/",
         loginURL = apiDomain + "api/login/?apikey=" + apiKey;
-    if(!isCordova) loginURL += "&url=" + escape(window.location + "#callback") +
-                        "&fixthegoddamnios6iframebugthatreallyscrewupeverything=arghhhhhhh";
+    if(!isCordova){
+        loginURL += "&url=" + escape(window.location.origin);
+    }
 
     var onlyChanges = true,
         lastUpdate = store && store.get("token") || 0;
@@ -41,6 +42,12 @@
             var w = iframe,
                 defer = $.Deferred();
             w.src = loginURL;
+            token = parseLocationForToken(location.href);
+            if(token){
+                store && store.set("token", token);
+                window.location = window.location.origin;
+                return defer.resolve();
+            }
             if(isCordova){
                 w.onload = function(){
                     var str = w.contentDocument.body.innerHTML;
@@ -51,13 +58,14 @@
                     }
                 };
             }else{
-                w.onload = function(){
-                    if(w.contentDocument){
-                        token = parseLocationForToken(w.contentDocument.location.href);
-                        store && store.set("token", token);
-                        defer.resolve();
-                    }
-                };
+                // w.onload = function(){
+                //     if(w.contentDocument){
+                //         token = parseLocationForToken(w.contentDocument.location.href);
+                //         store && store.set("token", token);
+                //         defer.resolve();
+                //     }
+                // };
+                window.location = loginURL;
             }
             return defer;
         }else{
