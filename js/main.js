@@ -1,14 +1,14 @@
 
 (function(){
-    // "use strict";
-
-    can.route(':filter');
-    can.route.ready(false);
+    "use strict";
 
     if((window.location + "").indexOf("callback") != -1){
         $("body").hide();
         return;
     }
+
+    can.route(':filter');
+    can.route.ready(false);
 
     var addTutorial = function(){
         [{

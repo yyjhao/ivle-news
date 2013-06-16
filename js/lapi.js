@@ -9,7 +9,8 @@
         apiDomain = "https://ivle.nus.edu.sg/",
         apiUrl = apiDomain + "api/lapi.svc/",
         loginURL = apiDomain + "api/login/?apikey=" + apiKey;
-    if(!isCordova) loginURL += "&url=" + escape(window.location + "#callback");
+    if(!isCordova) loginURL += "&url=" + escape(window.location + "#callback") +
+                        "&fixthegoddamnios6iframebugthatreallyscrewupeverything=arghhhhhhh";
 
     var onlyChanges = true,
         lastUpdate = store && store.get("token") || 0;
